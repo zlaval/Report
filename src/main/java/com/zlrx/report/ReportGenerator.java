@@ -22,15 +22,20 @@ public class ReportGenerator {
     public static void main(String[] args) {
 
         try (OutputStream outputStream = new FileOutputStream("report.pdf")) {
+
             StyleBuilder boldCentered = stl.style()
                     .bold()
                     .setHorizontalTextAlignment(HorizontalTextAlignment.CENTER);
+
             StyleBuilder columnTitleStyle = stl.style(boldCentered)
                     .setBorder(stl.pen1Point())
                     .setBackgroundColor(Color.LIGHT_GRAY);
 
-            TextColumnBuilder<Integer> salaryColumnBuilder = Columns.column("Salary", "salary", DataTypes.integerType());
-            TextColumnBuilder<String> nameColumnBuilder = Columns.column("Name", "name", DataTypes.stringType());
+            TextColumnBuilder<Integer> salaryColumnBuilder =
+                    Columns.column("Salary", "salary", DataTypes.integerType());
+
+            TextColumnBuilder<String> nameColumnBuilder =
+                    Columns.column("Name", "name", DataTypes.stringType());
 
             Bar3DChartBuilder salaryChart = cht.bar3DChart()
                     .setTitle("Salary")
@@ -57,7 +62,6 @@ public class ReportGenerator {
         }
 
     }
-
 
     private static List<ReportRow> reportData() {
         List<ReportRow> rows = new LinkedList<>();
@@ -97,9 +101,7 @@ public class ReportGenerator {
                 .salary(2300)
                 .build());
 
-
         return rows;
     }
-
 
 }
