@@ -10,9 +10,9 @@ import lombok.Setter;
 @Builder
 public class ReportRow {
 
-  private String name;
-  private Integer salary;
-  private String address;
-  private String job;
+    private String name;
+    private Integer salary;
+    private String address;
+    private String job;
 
 }
