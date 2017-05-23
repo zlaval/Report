@@ -1,6 +1,8 @@
 package com.zlrx.report;
 
+import net.sf.dynamicreports.report.builder.chart.Bar3DChartBuilder;
 import net.sf.dynamicreports.report.builder.column.Columns;
+import net.sf.dynamicreports.report.builder.column.TextColumnBuilder;
 import net.sf.dynamicreports.report.builder.datatype.DataTypes;
 import net.sf.dynamicreports.report.builder.style.StyleBuilder;
 import net.sf.dynamicreports.report.constant.HorizontalTextAlignment;
@@ -13,8 +15,10 @@ import java.io.OutputStream;
 import java.util.LinkedList;
 import java.util.List;
 
+import static net.sf.dynamicreports.report.builder.DynamicReports.cht;
 import static net.sf.dynamicreports.report.builder.DynamicReports.cmp;
 import static net.sf.dynamicreports.report.builder.DynamicReports.report;
+import static net.sf.dynamicreports.report.builder.DynamicReports.sbt;
 import static net.sf.dynamicreports.report.builder.DynamicReports.stl;
 
 public class ReportGenerator {
@@ -29,16 +33,26 @@ public class ReportGenerator {
         .setBorder(stl.pen1Point())
         .setBackgroundColor(Color.LIGHT_GRAY);
 
+      TextColumnBuilder<Integer> salaryColumnBuilder = Columns.column("Salary", "salary", DataTypes.integerType());
+      TextColumnBuilder<String> nameColumnBuilder = Columns.column("Name", "name", DataTypes.stringType());
+
+      Bar3DChartBuilder salaryChart = cht.bar3DChart()
+        .setTitle("Salary")
+        .setCategory(nameColumnBuilder)
+        .addSerie(cht.serie(salaryColumnBuilder));
+
       report()
         .setColumnTitleStyle(columnTitleStyle)
         .highlightDetailEvenRows()
         .title(cmp.text("Salary").setStyle(boldCentered))
         .columns(
-          Columns.column("Name", "name", DataTypes.stringType()),
+          nameColumnBuilder,
           Columns.column("Job", "job", DataTypes.stringType()),
           Columns.column("Address", "address", DataTypes.stringType()),
-          Columns.column("Salary", "salary", DataTypes.integerType())
+          salaryColumnBuilder
         )
+        .subtotalsAtSummary(sbt.sum(salaryColumnBuilder))
+        .summary(salaryChart)
         .setDataSource(reportData())
         .toPdf(outputStream);
 
